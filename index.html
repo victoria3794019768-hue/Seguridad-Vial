@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="description" content="Dashboard interactivo de siniestros viales en Corrientes, 2018–2025." />
+  <title>Siniestros viales · Corrientes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <style>
+    :root{--bg:#0b1220;--panel:#111c2f;--panel2:#142139;--border:#273750;--text:#eef4ff;--muted:#9aabc4;--teal:#36d6b0;--blue:#65a9ff;--coral:#ff7e8c;--amber:#f9c66b;--violet:#b5a2ff;--radius:18px;--shadow:0 16px 45px rgba(0,0,0,.16)}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top left,rgba(54,214,176,.08),transparent 32%),var(--bg);color:var(--text);font-family:'DM Sans',system-ui,sans-serif;font-size:14px;line-height:1.45}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--teal);outline-offset:2px}.wrap{max-width:1500px;margin:auto;padding:24px 26px 48px}.hero{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:10px 0 24px}.eyebrow{display:flex;align-items:center;gap:8px;color:var(--teal);font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700}.dot{width:8px;height:8px;background:var(--teal);border-radius:50%;box-shadow:0 0 0 5px rgba(54,214,176,.12)}h1,h2,h3,p{margin-top:0}h1{font-family:Manrope,sans-serif;font-size:clamp(27px,3.5vw,42px);line-height:1.08;letter-spacing:-.04em;margin:12px 0 12px;font-weight:800}.subtitle{max-width:750px;color:var(--muted);font-size:14px;margin:0}.hero-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;padding-top:6px;min-width:180px}.tag{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border:1px solid var(--border);border-radius:999px;background:rgba(20,33,57,.8);color:#d8e5f8;font-size:11px;font-weight:700;white-space:nowrap}.tag .small-dot{width:6px;height:6px;border-radius:50%;background:var(--teal)}.filters{display:grid;grid-template-columns:repeat(4,minmax(135px,1fr)) minmax(210px,1.5fr) auto;gap:12px;align-items:end;background:rgba(17,28,47,.86);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:17px;box-shadow:var(--shadow)}.field label{display:block;color:var(--muted);font-size:11px;font-weight:700;margin:0 0 7px;letter-spacing:.02em}.field select,.field input{width:100%;height:40px;background:#0c1627;border:1px solid #2b3a52;border-radius:10px;color:var(--text);padding:0 11px;outline:none}.field input::placeholder{color:#64758d}.btn{height:40px;border:1px solid var(--border);background:#1b2b42;color:#e8f2ff;padding:0 14px;border-radius:10px;font-weight:700;white-space:nowrap}.btn:hover{background:#253954}.btn.primary{border-color:rgba(54,214,176,.4);background:rgba(54,214,176,.13);color:#9dffe8}.active-filters{min-height:22px;display:flex;flex-wrap:wrap;gap:8px;margin:-3px 0 15px}.chip{display:inline-flex;align-items:center;gap:7px;border-radius:999px;border:1px solid rgba(54,214,176,.3);background:rgba(54,214,176,.1);color:#b9ffed;padding:5px 9px;font-size:11px;font-weight:600}.chip button{border:0;background:transparent;color:inherit;padding:0;font-weight:800;font-size:14px;line-height:1}.kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:17px}.kpi{position:relative;overflow:hidden;background:linear-gradient(145deg,#142139,#101a2c);border:1px solid var(--border);border-radius:var(--radius);padding:18px 19px;min-height:125px}.kpi:after{content:"";position:absolute;top:-32px;right:-25px;width:110px;height:110px;border-radius:50%;background:var(--kpi-color,rgba(54,214,176,.1));filter:blur(1px);opacity:.15}.kpi-label{color:var(--muted);font-size:12px;font-weight:600;position:relative;z-index:1}.kpi-value{font-family:Manrope,sans-serif;font-weight:800;letter-spacing:-.04em;font-size:clamp(27px,3vw,36px);line-height:1.2;margin:10px 0 4px;position:relative;z-index:1}.kpi-foot{font-size:10px;color:#8da0bc;position:relative;z-index:1}.layout{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px;margin-bottom:16px}.card{background:linear-gradient(150deg,rgba(17,28,47,.98),rgba(15,25,42,.98));border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);min-width:0}.span-12{grid-column:span 12}.span-8{grid-column:span 8}.span-7{grid-column:span 7}.span-6{grid-column:span 6}.span-5{grid-column:span 5}.span-4{grid-column:span 4}.card-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px}.card-title{font-family:Manrope,sans-serif;font-weight:800;font-size:15px;letter-spacing:-.02em;margin:0 0 5px}.card-desc{margin:0;color:var(--muted);font-size:11px;max-width:680px}.mini-badge{font-size:10px;font-weight:700;color:#b7c8de;background:#1b2b42;padding:6px 8px;border-radius:8px;white-space:nowrap}.chart-wrap{height:260px;position:relative}.chart-wrap.tall{height:330px}.chart-wrap.small{height:235px}.map-legend{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-top:10px;color:var(--muted);font-size:11px;flex-wrap:wrap}.legend-ramp{display:inline-flex;align-items:center;gap:7px}.ramp{width:84px;height:7px;border-radius:20px;background:linear-gradient(90deg,#253c8a,#31d6cf,#fff37b,#ff603e)}#map{height:390px;border-radius:12px;background:#0b1626;border:1px solid #273750;z-index:1}.map-count{display:inline-flex;gap:8px;align-items:center;color:#cde7ff;font-weight:700}.heat-scroll{overflow-x:auto;padding-bottom:5px}.heat-grid{display:grid;grid-template-columns:48px repeat(12,minmax(25px,1fr));gap:4px;min-width:500px}.heat-day,.heat-hour{font-size:10px;color:var(--muted);display:flex;align-items:center;justify-content:center}.heat-hour{height:20px}.heat-day{justify-content:flex-start;font-weight:700}.heat-cell{height:30px;border:1px solid rgba(255,255,255,.06);border-radius:5px;min-width:0;padding:0;color:#f5fbff;font-size:10px;font-weight:700;background:#1b2b42;transition:transform .12s,border-color .12s}.heat-cell:hover{transform:scale(1.04);border-color:rgba(255,255,255,.6)}.heat-cell.selected{outline:2px solid #fff;outline-offset:1px}.heat-legend{display:flex;align-items:center;gap:5px;margin-top:12px;color:var(--muted);font-size:10px}.heat-legend span{width:19px;height:9px;border-radius:2px;display:inline-block}.note{border-left:3px solid var(--amber);padding:10px 12px;margin-top:12px;color:#c8d4e6;background:rgba(249,198,107,.06);border-radius:0 9px 9px 0;font-size:11px}.submetrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:12px}.submetric{border:1px solid #26354d;background:#0d1728;border-radius:12px;padding:12px}.submetric .label{color:var(--muted);font-size:10px;font-weight:700}.submetric .value{font-family:Manrope,sans-serif;font-size:20px;font-weight:800;margin-top:6px;letter-spacing:-.03em}.submetric .detail{color:#8295b0;font-size:10px;margin-top:3px}.table-wrap{overflow:auto;border:1px solid #26354d;border-radius:12px}table{width:100%;border-collapse:collapse;min-width:920px;font-size:11px}th{background:#182840;color:#c9d7eb;text-align:left;font-weight:700;position:sticky;top:0;z-index:1}th,td{padding:10px 11px;border-bottom:1px solid #22324a;white-space:nowrap}td{color:#d9e4f2}tbody tr{background:#101a2b;cursor:pointer}tbody tr:nth-child(even){background:#0e1828}tbody tr:hover{background:#1b2e45}tbody tr:last-child td{border-bottom:0}.road-link{color:#9bffe5;font-weight:700}.pill-status{display:inline-block;padding:3px 7px;border-radius:6px;background:#1c3144;color:#c6e5ff;font-size:10px}.table-foot{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;color:var(--muted);font-size:11px}.pager{display:flex;gap:7px}.pager button{border:1px solid var(--border);background:#182840;color:var(--text);border-radius:8px;padding:7px 10px}.pager button:disabled{opacity:.35;cursor:not-allowed}.quality-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:15px}.quality{padding:13px;border:1px solid #283850;background:#0d1728;border-radius:12px}.quality .q-label{font-size:10px;color:var(--muted);font-weight:700}.quality .q-value{font:800 22px Manrope,sans-serif;margin:6px 0 2px}.quality .q-detail{font-size:10px;color:#8194ae}.method-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.method{padding:12px 13px;background:#0d1728;border:1px solid #26354d;border-radius:11px;color:#c5d2e4;font-size:11px}.method strong{color:#f0f6ff;display:block;margin-bottom:4px;font-size:11px}.method.warning{border-color:rgba(249,198,107,.4);background:rgba(249,198,107,.055)}.status-label{display:inline-block;background:rgba(249,198,107,.13);color:#ffdc95;border:1px solid rgba(249,198,107,.25);border-radius:7px;padding:4px 7px;font-size:9px;letter-spacing:.04em;font-weight:800;text-transform:uppercase}.empty{color:var(--muted);text-align:center;padding:25px;font-size:12px}.footer{display:flex;justify-content:space-between;gap:12px;color:#71839d;font-size:10px;padding:8px 3px 0}.loading{color:var(--muted);padding:24px;text-align:center}.error{color:#ffb4be;background:#351b29;border:1px solid #74364d;border-radius:12px;padding:14px;margin:18px 0}
+    @media(max-width:1050px){.filters{grid-template-columns:repeat(3,minmax(0,1fr))}.span-8,.span-7,.span-6,.span-5,.span-4{grid-column:span 12}.quality-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media(max-width:650px){.wrap{padding:16px 12px 30px}.hero{display:block}.hero-right{align-items:flex-start;margin-top:16px}.filters{grid-template-columns:repeat(2,minmax(0,1fr));padding:12px}.field.search{grid-column:span 2}.filters .btn{width:100%}.kpis{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.kpi{padding:14px;min-height:115px}.kpi-value{font-size:29px}.card{padding:14px}.card-head{display:block}.mini-badge{display:inline-block;margin-top:8px}.chart-wrap,.chart-wrap.small{height:250px}.chart-wrap.tall{height:300px}#map{height:320px}.submetrics{grid-template-columns:repeat(2,minmax(0,1fr))}.quality-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.method-list{grid-template-columns:1fr}.footer{display:block}.footer span{display:block;margin-bottom:5px}}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <header class="hero">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Observatorio vial · análisis exploratorio</div>
+        <h1>Siniestros viales<br>en Corrientes</h1>
+        <p class="subtitle">Un recorrido por la evolución anual, las vías y cruces con más registros, los horarios de ocurrencia y la situación de los semáforos. El tablero analiza hechos viales, no multas.</p>
+      </div>
+      <div class="hero-right">
+        <span class="tag"><span class="small-dot"></span> Período disponible: 2018–2025</span>
+        <span class="tag">Base consolidada · exploración interactiva</span>
+      </div>
+    </header>
+
+    <section class="filters" aria-label="Filtros del dashboard">
+      <div class="field"><label for="filter-year">Año</label><select id="filter-year"><option value="all">Todos los años</option></select></div>
+      <div class="field"><label for="filter-semaforo">Estado del semáforo</label><select id="filter-semaforo"><option value="all">Todos los estados</option></select></div>
+      <div class="field"><label for="filter-zone">Zona</label><select id="filter-zone"><option value="all">Todas las zonas</option></select></div>
+      <div class="field"><label for="filter-collision">Tipo de siniestro</label><select id="filter-collision"><option value="all">Todos los tipos</option></select></div>
+      <div class="field search"><label for="filter-search">Buscar calle, cruce, tipo o ID</label><input id="filter-search" type="search" placeholder="Ej.: Av. Maipú, alcance, 49056…" autocomplete="off" /></div>
+      <button class="btn primary" id="reset-filters" type="button">Limpiar filtros</button>
+    </section>
+    <div class="active-filters" id="active-filters" aria-live="polite"></div>
+    <div id="load-error" hidden class="error"></div>
+
+    <section class="kpis" aria-label="Indicadores principales">
+      <article class="kpi" style="--kpi-color:var(--teal)"><div class="kpi-label">Siniestros registrados</div><div class="kpi-value" id="kpi-incidents">—</div><div class="kpi-foot">Un registro por identificador de siniestro</div></article>
+      <article class="kpi" style="--kpi-color:var(--blue)"><div class="kpi-label">Vehículos involucrados</div><div class="kpi-value" id="kpi-vehicles">—</div><div class="kpi-foot" id="kpi-vehicles-foot">Suma de valores informados</div></article>
+      <article class="kpi" style="--kpi-color:var(--coral)"><div class="kpi-label">Heridos</div><div class="kpi-value" id="kpi-injured">—</div><div class="kpi-foot" id="kpi-injured-foot">Suma de valores informados</div></article>
+      <article class="kpi" style="--kpi-color:var(--amber)"><div class="kpi-label">Fallecidos</div><div class="kpi-value" id="kpi-deaths">—</div><div class="kpi-foot" id="kpi-deaths-foot">Suma de valores informados</div></article>
+    </section>
+
+    <section class="layout">
+      <article class="card span-7">
+        <div class="card-head"><div><h2 class="card-title">Hora × día de la semana</h2><p class="card-desc">Heatmap por bloques de dos horas. Cada celda es seleccionable y filtra el resto del tablero.</p></div><span class="mini-badge">Franja de 2 h</span></div>
+        <div class="heat-scroll"><div class="heat-grid" id="heatmap"><div class="loading">Cargando datos…</div></div></div>
+        <div class="heat-legend"><span>Menos</span><span style="background:#19394b"></span><span style="background:#176b70"></span><span style="background:#219f94"></span><span style="background:#71d4aa"></span><span style="background:#e4f5a0"></span><span>Más casos</span></div>
+        <div class="map-legend"><span id="heat-note">Conteos en los registros con fecha y hora disponibles.</span><span id="heat-selection"></span></div>
+      </article>
+      <article class="card span-5">
+        <div class="card-head"><div><h2 class="card-title">Evolución anual</h2><p class="card-desc">Cantidad de siniestros según el año informado en la base. Hacé clic en una barra para filtrar.</p></div><span class="mini-badge">2018–2025</span></div>
+        <div class="chart-wrap"><canvas id="year-chart" aria-label="Gráfico de siniestros por año"></canvas></div>
+        <div class="note" id="year-note">Tres registros no tienen año informado; se cuentan en el total, pero no pueden ubicarse en la serie anual.</div>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="card span-7">
+        <div class="card-head"><div><h2 class="card-title">Mapa de densidad de siniestros</h2><p class="card-desc">La intensidad representa concentración espacial de registros geolocalizados; no es una medición de riesgo por tránsito.</p></div><span class="mini-badge" id="map-badge">— puntos</span></div>
+        <div id="map" role="img" aria-label="Mapa de densidad de siniestros con coordenadas válidas"></div>
+        <div class="map-legend"><span class="map-count" id="map-count">—</span><span class="legend-ramp"><span>Menor densidad</span><span class="ramp"></span><span>Mayor densidad</span></span></div>
+        <div class="note">El mapa omite registros sin coordenadas utilizables. La ubicación se interpreta con un encuadre aproximado de Corrientes capital y alrededores; no se deben leer los espacios sin puntos como zonas seguras.</div>
+      </article>
+      <article class="card span-5">
+        <div class="card-head"><div><h2 class="card-title">Estado del semáforo en los siniestros</h2><p class="card-desc">Cantidad de registros asociados a cada estado declarado. Hacé clic en una barra para filtrar.</p></div><span class="mini-badge">Incluye «Sin dato»</span></div>
+        <div class="chart-wrap tall"><canvas id="semaforo-chart" aria-label="Gráfico por estado del semáforo"></canvas></div>
+        <div class="note">Este gráfico describe lo que figura en el registro del siniestro; por sí solo no demuestra que los semáforos causen, eviten o reduzcan siniestros.</div>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="card span-8">
+        <div class="card-head"><div><h2 class="card-title">Severidad por vía</h2><p class="card-desc">Barras apiladas de heridos y fallecidos para las vías priorizadas por daño ponderado. Un fallecido pesa 10 puntos en el criterio de ordenamiento.</p></div><span class="mini-badge">Heridos + 10 × fallecidos</span></div>
+        <div class="chart-wrap tall"><canvas id="severity-chart" aria-label="Barras apiladas de heridos y fallecidos por vía"></canvas></div>
+        <p class="card-desc">Seleccioná una vía para filtrar el mapa, los indicadores y la tabla. El ranking no está normalizado por kilómetros de calle.</p>
+      </article>
+      <article class="card span-4">
+        <div class="card-head"><div><h2 class="card-title">Indicadores complementarios</h2><p class="card-desc">Se recalculan con los filtros activos.</p></div></div>
+        <div class="submetrics">
+          <div class="submetric"><div class="label">Fallecidos / siniestros</div><div class="value" id="metric-lethality">—</div><div class="detail">Fallecidos ÷ registros</div></div>
+          <div class="submetric"><div class="label">Vehículos por siniestro</div><div class="value" id="metric-vehicles-average">—</div><div class="detail">Promedio con dato</div></div>
+          <div class="submetric"><div class="label">Concentración en el 10% de vías</div><div class="value" id="metric-concentration">—</div><div class="detail">Por cantidad de casos; sin km</div></div>
+          <div class="submetric"><div class="label">Con coordenadas utilizables</div><div class="value" id="metric-geocoded">—</div><div class="detail" id="metric-geocoded-detail">—</div></div>
+        </div>
+        <div class="note">La métrica «Fallecidos / siniestros» sigue la fórmula de la consigna. No equivale a la proporción de siniestros que tuvieron al menos un fallecido.</div>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="card span-6">
+        <div class="card-head"><div><h2 class="card-title">Cruces con más registros</h2><p class="card-desc">Combinación de vía y primera calle de cruce declarada. Seleccioná una fila para filtrar por la vía.</p></div><span class="mini-badge">Top 10</span></div>
+        <div class="table-wrap"><table style="min-width:420px"><thead><tr><th>Vía</th><th>Cruce informado</th><th>Siniestros</th></tr></thead><tbody id="crossing-table"><tr><td colspan="3" class="empty">Cargando…</td></tr></tbody></table></div>
+      </article>
+      <article class="card span-6">
+        <div class="card-head"><div><h2 class="card-title">Concentración y vías prioritarias</h2><p class="card-desc">Ordenamiento por daño ponderado; clic en una vía para explorar sus registros.</p></div><span class="mini-badge">Interactivo</span></div>
+        <div id="road-ranking"><div class="loading">Cargando…</div></div>
+        <div class="note">El índice sirve para ordenar la revisión de vías, no es un índice oficial de peligrosidad. Falta longitud de vía y exposición al tránsito para comparar tasas equivalentes.</div>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="card span-12">
+        <div class="card-head"><div><h2 class="card-title">Registros del conjunto filtrado</h2><p class="card-desc">La tabla cambia con los filtros. Hacé clic en una fila para filtrar el tablero por su vía.</p></div><span class="mini-badge" id="table-count">— registros</span></div>
+        <div class="table-wrap"><table><thead><tr><th>ID</th><th>Año</th><th>Fecha</th><th>Hora</th><th>Vía</th><th>Cruce</th><th>Tipo</th><th>Semáforo</th><th>Vehículos</th><th>Heridos</th><th>Fallecidos</th><th>Mapa</th></tr></thead><tbody id="records-table"><tr><td colspan="12" class="empty">Cargando datos…</td></tr></tbody></table></div>
+        <div class="table-foot"><span id="table-page-label">—</span><div class="pager"><button type="button" id="prev-page" disabled>Anterior</button><button type="button" id="next-page" disabled>Siguiente</button></div></div>
+      </article>
+    </section>
+
+    <section class="layout">
+      <article class="card span-12">
+        <div class="card-head"><div><h2 class="card-title">Calidad de datos y límites del análisis</h2><p class="card-desc">Los faltantes se muestran como «Sin dato» y no se convierten automáticamente en cero.</p></div><span class="mini-badge">Metodología</span></div>
+        <div class="quality-grid">
+          <div class="quality"><div class="q-label">Registros totales</div><div class="q-value" id="quality-total">—</div><div class="q-detail">Incluye todos los años disponibles</div></div>
+          <div class="quality"><div class="q-label">Sin coordenadas</div><div class="q-value" id="quality-no-coords">—</div><div class="q-detail">No se ubican en el mapa</div></div>
+          <div class="quality"><div class="q-label">Coordenadas no válidas</div><div class="q-value" id="quality-bad-coords">—</div><div class="q-detail">Fuera del encuadre o valores centinela</div></div>
+          <div class="quality"><div class="q-label">Año sin informar</div><div class="q-value" id="quality-no-year">—</div><div class="q-detail">Quedan fuera de la evolución anual</div></div>
+        </div>
+        <div class="method-list">
+          <div class="method"><strong>Coordenadas</strong>Se normalizaron coordenadas con puntos de agrupación —por ejemplo, <code>-2.748.105</code> se interpreta como <code>-27.48105</code>—. Se excluyeron del mapa los registros sin coordenadas y los que quedan fuera del encuadre geográfico aproximado utilizado.</div>
+          <div class="method"><strong>Semáforos faltantes</strong>Los campos vacíos y los valores <code>S/D</code> se agrupan visualmente como «Sin dato». No se interpretan como «Sin Semáforo» ni como cero.</div>
+          <div class="method"><strong>Nombre de vía</strong>El valor aislado <code>12</code> se normaliza en la presentación como «Ruta Nacional 12» para que no aparezca como si fuera una calle llamada solamente “12”.</div>
+          <div class="method warning"><strong><span class="status-label">Pendiente por falta de datos</span><br>Comparación contra el padrón de semáforos</strong>Esta base contiene el estado declarado en cada siniestro, pero no el inventario completo de semáforos ni sus ubicaciones. Por eso no se calcula la tasa «siniestros por semáforo» ni una comparación fiable entre cruces semaforizados y no semaforizados. Para hacerlo hace falta agregar el padrón y vincularlo con los cruces.</div>
+          <div class="method"><strong>Ranking de vías</strong>El índice de priorización es <code>heridos + 10 × fallecidos</code>, calculado con valores informados. El orden no está normalizado por longitud de la vía, flujo vehicular ni exposición; una avenida extensa puede acumular más casos por tener más tránsito o más cruces.</div>
+          <div class="method"><strong>Interpretación</strong>El mapa de densidad indica dónde se concentran los registros geolocalizados, no la probabilidad de sufrir un siniestro. Los datos ausentes pueden sesgar los patrones; los gráficos describen asociaciones y no prueban causalidad.</div>
+        </div>
+      </article>
+    </section>
+    <footer class="footer"><span>Fuente: archivo consolidado aportado para el trabajo · base de siniestros viales.</span><span>Dashboard estático preparado para Vercel · actualización mediante <code>data.json</code>.</span></footer>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script>
+  (() => {
+    const fmt = n => Number(n || 0).toLocaleString('es-AR');
+    const num = v => (v === null || v === undefined || v === '' || !Number.isFinite(Number(v))) ? null : Number(v);
+    const missingText = v => (v === null || v === undefined || String(v).trim() === '') ? 'S/D' : String(v);
+    const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const yearLabel = r => r.year === null ? 'Sin año' : String(r.year);
+    const dayNames = ['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+    const dayShort = ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'];
+    const dayOrder = [1,2,3,4,5,6,0];
+    const hourBucket = r => r.time ? Math.floor(Number(r.time.slice(0,2))/2)*2 : null;
+    const dateDay = r => {
+      if (!r.date) return null;
+      const p = r.date.split('-').map(Number); if (p.length !== 3 || !p[0] || !p[1] || !p[2]) return null;
+      return new Date(p[0],p[1]-1,p[2]).getDay();
+    };
+    const state = {year:'all',semaforo:'all',zone:'all',collision:'all',road:'all',heat:null,search:'',page:0,pageSize:25};
+    let records = [];
+    let map = null, heatLayer = null, charts = {};
+    let mapInitialized = false;
+    let lastFiltered = [];
+
+    function sumKnown(arr, key) { let sum=0,n=0; for (const r of arr) { const v=num(r[key]); if(v!==null){sum+=v;n++;}} return {sum,n}; }
+    function pct(a,b) { return b ? (100*a/b) : 0; }
+    function weighted(r) { return (num(r.injured) || 0) + 10*(num(r.deaths) || 0); }
+    function recordDayMatchesHeat(r, heat) { return dateDay(r) === heat.day && hourBucket(r) === heat.bucket; }
+    function matches(r, ignore='') {
+      if (ignore !== 'year' && state.year !== 'all' && yearLabel(r) !== state.year) return false;
+      if (ignore !== 'semaforo' && state.semaforo !== 'all' && r.semaforo !== state.semaforo) return false;
+      if (ignore !== 'zone' && state.zone !== 'all' && r.zone !== state.zone) return false;
+      if (ignore !== 'collision' && state.collision !== 'all' && r.collision !== state.collision) return false;
+      if (ignore !== 'road' && state.road !== 'all' && r.road !== state.road) return false;
+      if (ignore !== 'heat' && state.heat && !recordDayMatchesHeat(r, state.heat)) return false;
+      if (ignore !== 'search' && state.search) {
+        const hay = [r.id,yearLabel(r),r.date,r.time,r.road,r.crossing1,r.crossing2,r.collision,r.semaforo,r.zone,r.locality].join(' ').toLocaleLowerCase('es');
+        if (!hay.includes(state.search.toLocaleLowerCase('es'))) return false;
+      }
+      return true;
+    }
+    function getFiltered(ignore='') { return records.filter(r=>matches(r,ignore)); }
+    function distinctValues(field, order=[]) {
+      const vals = [...new Set(records.map(r=>field==='year' ? yearLabel(r) : (r[field] ?? 'Sin dato')))].sort((a,b)=>String(a).localeCompare(String(b),'es'));
+      if (order.length) return [...order.filter(v=>vals.includes(v)),...vals.filter(v=>!order.includes(v))];
+      return vals;
+    }
+    function fillSelect(id, field, initial, order=[]) {
+      const el = document.getElementById(id); const selected = el.value || 'all';
+      el.innerHTML = `<option value="all">${esc(initial)}</option>` + distinctValues(field,order).map(v=>`<option value="${esc(v)}">${esc(v)}</option>`).join('');
+      if ([...el.options].some(o=>o.value===selected)) el.value=selected;
+    }
+    function syncControls() {
+      document.getElementById('filter-year').value=state.year;
+      document.getElementById('filter-semaforo').value=state.semaforo;
+      document.getElementById('filter-zone').value=state.zone;
+      document.getElementById('filter-collision').value=state.collision;
+      document.getElementById('filter-search').value=state.search;
+    }
+    function renderActiveFilters() {
+      const box=document.getElementById('active-filters'); const entries=[];
+      if(state.year!=='all') entries.push(['Año',state.year,'year']);
+      if(state.semaforo!=='all') entries.push(['Semáforo',state.semaforo,'semaforo']);
+      if(state.zone!=='all') entries.push(['Zona',state.zone,'zone']);
+      if(state.collision!=='all') entries.push(['Tipo',state.collision,'collision']);
+      if(state.road!=='all') entries.push(['Vía',state.road,'road']);
+      if(state.heat) entries.push(['Horario',`${dayNames[state.heat.day]} · ${String(state.heat.bucket).padStart(2,'0')}:00–${String(state.heat.bucket+2).padStart(2,'0')}:00`,'heat']);
+      if(state.search) entries.push(['Búsqueda',state.search,'search']);
+      box.innerHTML=entries.map(([label,value,key])=>`<span class="chip">${esc(label)}: ${esc(value)} <button type="button" data-clear="${esc(key)}" aria-label="Quitar filtro ${esc(label)}">×</button></span>`).join('');
+      box.querySelectorAll('[data-clear]').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.clear;if(k==='heat')state.heat=null;else if(k==='road')state.road='all';else if(k==='search')state.search='';else state[k]='all';state.page=0;syncControls();renderAll();}));
+    }
+    function baseChartOptions(extra={}) {
+      return {responsive:true,maintainAspectRatio:false,animation:{duration:180},plugins:{legend:{labels:{color:'#afc0d7',usePointStyle:true,boxWidth:8,boxHeight:8,font:{family:'DM Sans',size:10}}},tooltip:{backgroundColor:'#091321',borderColor:'#32435e',borderWidth:1,titleColor:'#fff',bodyColor:'#dbe7f5',padding:10,displayColors:true}},scales:{x:{ticks:{color:'#93a6c0',font:{family:'DM Sans',size:10}},grid:{color:'rgba(147,166,192,.10)'},border:{color:'#2d3d55'}},y:{ticks:{color:'#93a6c0',font:{family:'DM Sans',size:10}},grid:{color:'rgba(147,166,192,.10)'},border:{color:'#2d3d55'}}},...extra};
+    }
+    function chartDraw(id, config) {
+      if(typeof Chart==='undefined') return;
+      if(charts[id]) charts[id].destroy();
+      const ctx=document.getElementById(id); if(!ctx)return;
+      charts[id]=new Chart(ctx,config);
+    }
+    function renderKPIs(arr) {
+      const v=sumKnown(arr,'vehicles'), h=sumKnown(arr,'injured'), d=sumKnown(arr,'deaths');
+      document.getElementById('kpi-incidents').textContent=fmt(arr.length);
+      document.getElementById('kpi-vehicles').textContent=fmt(v.sum);
+      document.getElementById('kpi-injured').textContent=fmt(h.sum);
+      document.getElementById('kpi-deaths').textContent=fmt(d.sum);
+      document.getElementById('kpi-vehicles-foot').textContent=`${fmt(v.n)} registros con dato; faltantes no imputados`;
+      document.getElementById('kpi-injured-foot').textContent=`${fmt(h.n)} registros con dato; faltantes no imputados`;
+      document.getElementById('kpi-deaths-foot').textContent=`${fmt(d.n)} registros con dato; faltantes no imputados`;
+    }
+    function renderYearChart() {
+      const arr=getFiltered('year');
+      const labels=['2018','2019','2020','2021','2022','2023','2024','2025','Sin año'];
+      const counts=labels.map(y=>arr.filter(r=>yearLabel(r)===y).length);
+      chartDraw('year-chart',{type:'bar',data:{labels,datasets:[{label:'Siniestros',data:counts,backgroundColor:labels.map(y=>state.year===y?'#36d6b0':'rgba(101,169,255,.66)'),hoverBackgroundColor:'#36d6b0',borderRadius:6,borderSkipped:false,maxBarThickness:30}]},options:baseChartOptions({onClick:(_,els)=>{if(!els.length)return;const label=labels[els[0].index];state.year=state.year===label?'all':label;state.page=0;syncControls();renderAll();},plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${fmt(c.raw)} siniestros`},backgroundColor:'#091321',borderColor:'#32435e',borderWidth:1,titleColor:'#fff',bodyColor:'#dbe7f5'}},scales:{x:{ticks:{color:'#93a6c0',font:{size:10}},grid:{display:false},border:{color:'#2d3d55'}},y:{beginAtZero:true,ticks:{color:'#93a6c0',precision:0},grid:{color:'rgba(147,166,192,.10)'},border:{display:false}}}})});
+    }
+    function renderSemaforoChart() {
+      const arr=getFiltered('semaforo');
+      const preferred=['Sin Semáforo','Funciona','Intermitente','No Funciona','Sin dato'];
+      const cats=[...preferred.filter(c=>arr.some(r=>r.semaforo===c)),...([...new Set(arr.map(r=>r.semaforo))].filter(c=>!preferred.includes(c)).sort())];
+      const values=cats.map(c=>arr.filter(r=>r.semaforo===c).length);
+      const palette={'Sin Semáforo':'#65a9ff','Funciona':'#36d6b0','Intermitente':'#f9c66b','No Funciona':'#ff7e8c','Sin dato':'#8795aa'};
+      chartDraw('semaforo-chart',{type:'bar',data:{labels:cats,datasets:[{data:values,backgroundColor:cats.map(c=>state.semaforo===c?'#e4f5a0':palette[c]||'#b5a2ff'),borderRadius:5,borderSkipped:false,maxBarThickness:26}]},options:baseChartOptions({indexAxis:'y',plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>`${fmt(c.raw)} siniestros`},backgroundColor:'#091321',borderColor:'#32435e',borderWidth:1,titleColor:'#fff',bodyColor:'#dbe7f5'}},scales:{x:{beginAtZero:true,ticks:{color:'#93a6c0',precision:0},grid:{color:'rgba(147,166,192,.10)'},border:{display:false}},y:{ticks:{color:'#b7c7dd',font:{size:10}},grid:{display:false},border:{display:false}}},onClick:(_,els)=>{if(!els.length)return;const v=cats[els[0].index];state.semaforo=state.semaforo===v?'all':v;state.page=0;syncControls();renderAll();}})});
+    }
+    function roadGroups(arr) {
+      const m=new Map();
+      for(const r of arr){if(!r.road||r.road==='Sin dato')continue;let g=m.get(r.road);if(!g){g={road:r.road,incidents:0,injured:0,deaths:0,injuredN:0,deathsN:0,vehicles:0,vehiclesN:0};m.set(r.road,g);}g.incidents++;if(num(r.injured)!==null){g.injured+=Number(r.injured);g.injuredN++;}if(num(r.deaths)!==null){g.deaths+=Number(r.deaths);g.deathsN++;}if(num(r.vehicles)!==null){g.vehicles+=Number(r.vehicles);g.vehiclesN++;}}
+      return [...m.values()].map(g=>({...g,score:g.injured+10*g.deaths}));
+    }
+    function renderSeverityChart() {
+      const arr=getFiltered('road');
+      const roads=roadGroups(arr).sort((a,b)=>b.score-a.score||b.incidents-a.incidents).slice(0,10);
+      const labels=roads.map(r=>r.road), injured=roads.map(r=>r.injured), deaths=roads.map(r=>r.deaths);
+      chartDraw('severity-chart',{type:'bar',data:{labels,datasets:[{label:'Heridos',data:injured,backgroundColor:'#ff7e8c',borderRadius:4,stack:'severity'},{label:'Fallecidos',data:deaths,backgroundColor:'#f9c66b',borderRadius:4,stack:'severity'}]},options:baseChartOptions({indexAxis:'y',onClick:(_,els)=>{if(!els.length)return;const v=labels[els[0].index];state.road=state.road===v?'all':v;state.page=0;syncControls();renderAll();},plugins:{legend:{position:'bottom',labels:{color:'#afc0d7',usePointStyle:true,boxWidth:8,font:{size:10}}},tooltip:{callbacks:{afterBody:(items)=>{const idx=items[0]?.dataIndex;return idx===undefined?'':`Siniestros: ${fmt(roads[idx].incidents)}\nÍndice: ${fmt(roads[idx].score)}`;}}}},scales:{x:{stacked:true,beginAtZero:true,ticks:{color:'#93a6c0',precision:0},grid:{color:'rgba(147,166,192,.10)'},border:{display:false}},y:{stacked:true,ticks:{color:'#b7c7dd',font:{size:10}},grid:{display:false},border:{display:false}}}})});
+    }
+    function renderHeatmap() {
+      const arr=getFiltered('heat').filter(r=>r.date && r.time);
+      const counts=new Map();let max=0;
+      for(const r of arr){const d=dateDay(r),b=hourBucket(r);if(d===null||b===null)continue;const k=`${d}-${b}`;const n=(counts.get(k)||0)+1;counts.set(k,n);max=Math.max(max,n);}
+      const root=document.getElementById('heatmap');let html='<div></div>';
+      for(let b=0;b<24;b+=2)html+=`<div class="heat-hour">${String(b).padStart(2,'0')}h</div>`;
+      for(const d of dayOrder){html+=`<div class="heat-day">${dayShort[d]}</div>`;for(let b=0;b<24;b+=2){const count=counts.get(`${d}-${b}`)||0;const ratio=max?count/max:0;const color=heatColor(ratio);const selected=state.heat&&state.heat.day===d&&state.heat.bucket===b?' selected':'';html+=`<button type="button" class="heat-cell${selected}" data-day="${d}" data-bucket="${b}" style="background:${color}" title="${dayNames[d]}, ${String(b).padStart(2,'0')}:00–${String(b+2).padStart(2,'0')}:00 · ${fmt(count)} siniestros">${count?fmt(count):'·'}</button>`;}}
+      root.innerHTML=html;
+      root.querySelectorAll('[data-day]').forEach(btn=>btn.addEventListener('click',()=>{const heat={day:Number(btn.dataset.day),bucket:Number(btn.dataset.bucket)};state.heat=state.heat&&state.heat.day===heat.day&&state.heat.bucket===heat.bucket?null:heat;state.page=0;renderAll();}));
+      const sample=getFiltered('heat').filter(r=>r.date&&r.time).length;
+      document.getElementById('heat-note').textContent=`${fmt(sample)} registros con fecha y hora disponibles dentro de los filtros actuales.`;
+      document.getElementById('heat-selection').textContent=state.heat?`Seleccionado: ${dayNames[state.heat.day]} · ${String(state.heat.bucket).padStart(2,'0')}:00–${String(state.heat.bucket+2).padStart(2,'0')}:00`:'';
+    }
+    function heatColor(r){const stops=[[25,57,75],[23,107,112],[33,159,148],[113,212,170],[228,245,160]];const x=Math.max(0,Math.min(.9999,r))*(stops.length-1);const i=Math.floor(x),t=x-i;const a=stops[i],b=stops[Math.min(i+1,stops.length-1)];return `rgb(${Math.round(a[0]+(b[0]-a[0])*t)},${Math.round(a[1]+(b[1]-a[1])*t)},${Math.round(a[2]+(b[2]-a[2])*t)})`;}
+    function renderMap(arr) {
+      const geocoded=arr.filter(r=>r.mapValid&&num(r.lat)!==null&&num(r.lon)!==null);
+      const nonGeo=arr.length-geocoded.length;
+      document.getElementById('map-badge').textContent=`${fmt(geocoded.length)} puntos`;
+      document.getElementById('map-count').textContent=`${fmt(geocoded.length)} geolocalizados de ${fmt(arr.length)} registros filtrados (${pct(geocoded.length,arr.length).toLocaleString('es-AR',{maximumFractionDigits:1})}%)`;
+      if(typeof L==='undefined'){document.getElementById('map').innerHTML='<div class="loading">No se pudo cargar el mapa. Verificá la conexión a internet y volvé a abrir el dashboard.</div>';return;}
+      if(!mapInitialized){map=L.map('map',{zoomControl:true,scrollWheelZoom:false}).setView([-27.48,-58.82],12);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap contributors'}).addTo(map);mapInitialized=true;}
+      if(heatLayer){map.removeLayer(heatLayer);heatLayer=null;}
+      if(geocoded.length&&typeof L.heatLayer==='function'){
+        heatLayer=L.heatLayer(geocoded.map(r=>[r.lat,r.lon,1]),{radius:24,blur:19,maxZoom:17,max:2.5,minOpacity:.34,gradient:{0.15:'#253b8a',0.38:'#2e9cbb',0.58:'#36d6b0',0.78:'#e4f5a0',1:'#ff684d'}}).addTo(map);
+      } else if(geocoded.length){
+        const layer=L.layerGroup();for(const r of geocoded){L.circleMarker([r.lat,r.lon],{radius:4,color:'#36d6b0',fillOpacity:.45,weight:1}).addTo(layer).bindPopup(`<b>${esc(r.road)}</b><br>${esc(r.date||'Fecha S/D')} · ${esc(r.time||'Hora S/D')}<br>Heridos: ${esc(missingText(r.injured))} · Fallecidos: ${esc(missingText(r.deaths))}`);}layer.addTo(map);heatLayer=layer;
+      }
+      setTimeout(()=>map.invalidateSize(),80);
+    }
+    function renderMetrics(arr) {
+      const deaths=sumKnown(arr,'deaths'), vehicles=sumKnown(arr,'vehicles');
+      document.getElementById('metric-lethality').textContent=`${pct(deaths.sum,arr.length).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2})}%`;
+      document.getElementById('metric-vehicles-average').textContent=vehicles.n?(vehicles.sum/vehicles.n).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2}):'S/D';
+      const roads=roadGroups(arr).sort((a,b)=>b.incidents-a.incidents);const knownRoadCases=roads.reduce((s,r)=>s+r.incidents,0);const k=roads.length?Math.max(1,Math.ceil(roads.length*.1)):0;const topCases=roads.slice(0,k).reduce((s,r)=>s+r.incidents,0);
+      document.getElementById('metric-concentration').textContent=knownRoadCases?`${pct(topCases,knownRoadCases).toLocaleString('es-AR',{maximumFractionDigits:1})}%`:'S/D';
+      const geo=arr.filter(r=>r.mapValid).length;document.getElementById('metric-geocoded').textContent=`${pct(geo,arr.length).toLocaleString('es-AR',{maximumFractionDigits:1})}%`;
+      document.getElementById('metric-geocoded-detail').textContent=`${fmt(geo)} de ${fmt(arr.length)} registros`;
+    }
+    function renderCrossings(arr) {
+      const groups=new Map();
+      for(const r of arr){const cross=r.crossing1||r.crossing2;if(!r.road||r.road==='Sin dato'||!cross||cross==='Sin dato')continue;const key=`${r.road}|||${cross}`;groups.set(key,(groups.get(key)||0)+1);}
+      const top=[...groups.entries()].sort((a,b)=>b[1]-a[1]).slice(0,10);
+      const tbody=document.getElementById('crossing-table');
+      tbody.innerHTML=top.length?top.map(([key,count])=>{const [road,cross]=key.split('|||');return `<tr data-road="${esc(road)}"><td class="road-link">${esc(road)}</td><td>${esc(cross)}</td><td>${fmt(count)}</td></tr>`;}).join(''):'<tr><td colspan="3" class="empty">No hay cruces identificados en esta selección.</td></tr>';
+      tbody.querySelectorAll('tr[data-road]').forEach(tr=>tr.addEventListener('click',()=>{state.road=tr.dataset.road;state.page=0;renderAll();}));
+    }
+    function renderRoadRanking(arr) {
+      const roads=roadGroups(arr).sort((a,b)=>b.score-a.score||b.incidents-a.incidents).slice(0,8);
+      const max=roads.length?Math.max(...roads.map(r=>r.score),1):1;const el=document.getElementById('road-ranking');
+      if(!roads.length){el.innerHTML='<div class="empty">No hay vías identificadas para estos filtros.</div>';return;}
+      el.innerHTML=roads.map((r,i)=>`<button type="button" data-road="${esc(r.road)}" style="display:block;width:100%;border:1px solid ${state.road===r.road?'rgba(54,214,176,.55)':'#26354d'};background:${state.road===r.road?'rgba(54,214,176,.09)':'#0d1728'};border-radius:11px;text-align:left;padding:10px 11px;margin-bottom:8px;color:inherit"><div style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span style="font-weight:700;font-size:11px;color:#dce8f8">${i+1}. ${esc(r.road)}</span><span style="color:#9affe7;font-weight:800;font-size:11px">Índice ${fmt(r.score)}</span></div><div style="height:5px;background:#203149;border-radius:9px;margin:8px 0 6px;overflow:hidden"><div style="height:100%;width:${pct(r.score,max)}%;background:linear-gradient(90deg,#36d6b0,#65a9ff);border-radius:9px"></div></div><div style="display:flex;justify-content:space-between;gap:8px;color:#8fa2bd;font-size:10px"><span>${fmt(r.incidents)} siniestros</span><span>${fmt(r.injured)} heridos · ${fmt(r.deaths)} fallecidos</span></div></button>`).join('');
+      el.querySelectorAll('[data-road]').forEach(b=>b.addEventListener('click',()=>{const road=b.dataset.road;state.road=state.road===road?'all':road;state.page=0;renderAll();}));
+    }
+    function renderTable(arr) {
+      const sorted=arr.slice().sort((a,b)=>String(b.date||'0000-00-00').localeCompare(String(a.date||'0000-00-00')) || String(b.time||'').localeCompare(String(a.time||'')) || (Number(b.id)||0)-(Number(a.id)||0));
+      document.getElementById('table-count').textContent=`${fmt(arr.length)} registros`;
+      const start=state.page*state.pageSize;const page=sorted.slice(start,start+state.pageSize);const tbody=document.getElementById('records-table');
+      tbody.innerHTML=page.length?page.map(r=>`<tr data-road="${esc(r.road)}"><td>${esc(missingText(r.id))}</td><td>${esc(yearLabel(r))}</td><td>${esc(missingText(r.date))}</td><td>${esc(missingText(r.time))}</td><td class="road-link">${esc(r.road)}</td><td>${esc(r.crossing1||r.crossing2||'S/D')}</td><td>${esc(r.collision)}</td><td><span class="pill-status">${esc(r.semaforo)}</span></td><td>${esc(missingText(r.vehicles))}</td><td>${esc(missingText(r.injured))}</td><td>${esc(missingText(r.deaths))}</td><td>${r.mapValid?'<span style="color:#9affe7">Válidas</span>':'<span style="color:#ffcf90">No incluida</span>'}</td></tr>`).join(''):'<tr><td colspan="12" class="empty">No hay registros que coincidan con los filtros.</td></tr>';
+      tbody.querySelectorAll('tr[data-road]').forEach(tr=>tr.addEventListener('click',()=>{state.road=tr.dataset.road;state.page=0;renderAll();}));
+      const pages=Math.max(1,Math.ceil(sorted.length/state.pageSize));document.getElementById('table-page-label').textContent=sorted.length?`Mostrando ${fmt(start+1)}–${fmt(Math.min(start+state.pageSize,sorted.length))} de ${fmt(sorted.length)} · página ${state.page+1}/${pages}`:'Sin resultados';
+      document.getElementById('prev-page').disabled=state.page<=0;document.getElementById('next-page').disabled=state.page>=pages-1;
+    }
+    function renderQuality() {
+      document.getElementById('quality-total').textContent=fmt(records.length);
+      document.getElementById('quality-no-coords').textContent=fmt(records.filter(r=>r.mapStatus==='Sin coordenadas').length);
+      document.getElementById('quality-bad-coords').textContent=fmt(records.filter(r=>r.mapStatus==='Coordenadas no válidas para el mapa').length);
+      document.getElementById('quality-no-year').textContent=fmt(records.filter(r=>r.year===null).length);
+    }
+    function renderAll() {
+      const arr=getFiltered();lastFiltered=arr;
+      renderActiveFilters();renderKPIs(arr);renderYearChart();renderSemaforoChart();renderSeverityChart();renderHeatmap();renderMap(arr);renderMetrics(arr);renderCrossings(getFiltered('road'));renderRoadRanking(getFiltered('road'));renderTable(arr);
+    }
+    function setup() {
+      fillSelect('filter-year','year','Todos los años',['2018','2019','2020','2021','2022','2023','2024','2025','Sin año']);
+      fillSelect('filter-semaforo','semaforo','Todos los estados',['Sin Semáforo','Funciona','Intermitente','No Funciona','Sin dato']);
+      fillSelect('filter-zone','zone','Todas las zonas');
+      fillSelect('filter-collision','collision','Todos los tipos');
+      document.getElementById('filter-year').addEventListener('change',e=>{state.year=e.target.value;state.page=0;renderAll();});
+      document.getElementById('filter-semaforo').addEventListener('change',e=>{state.semaforo=e.target.value;state.page=0;renderAll();});
+      document.getElementById('filter-zone').addEventListener('change',e=>{state.zone=e.target.value;state.page=0;renderAll();});
+      document.getElementById('filter-collision').addEventListener('change',e=>{state.collision=e.target.value;state.page=0;renderAll();});
+      document.getElementById('filter-search').addEventListener('input',e=>{state.search=e.target.value.trim();state.page=0;renderAll();});
+      document.getElementById('reset-filters').addEventListener('click',()=>{state.year=state.semaforo=state.zone=state.collision='all';state.road='all';state.heat=null;state.search='';state.page=0;syncControls();renderAll();});
+      document.getElementById('prev-page').addEventListener('click',()=>{state.page=Math.max(0,state.page-1);renderTable(getFiltered());});
+      document.getElementById('next-page').addEventListener('click',()=>{const pages=Math.max(1,Math.ceil(getFiltered().length/state.pageSize));state.page=Math.min(pages-1,state.page+1);renderTable(getFiltered());});
+      renderQuality();syncControls();renderAll();
+    }
+    fetch('./data.json').then(res=>{if(!res.ok)throw new Error('No se pudo leer data.json');return res.json();}).then(json=>{records=json;setup();}).catch(err=>{const e=document.getElementById('load-error');e.hidden=false;e.textContent='No se pudieron cargar los datos del dashboard. Asegurate de desplegar index.html junto con data.json dentro de la misma carpeta. Detalle: '+err.message;});
+  })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "total_records": 3781,
+  "years": {
+    "2018": 406,
+    "2019": 762,
+    "2020": 438,
+    "2021": 655,
+    "2022": 777,
+    "2023": 384,
+    "2024": 243,
+    "2025": 113,
+    "Sin año": 3
+  },
+  "map_valid": 2294,
+  "map_invalid": 1487,
+  "map_status": {
+    "Válidas": 2294,
+    "Sin coordenadas": 1478,
+    "Coordenadas no válidas para el mapa": 9
+  },
+  "semaphore": {
+    "Funciona": 808,
+    "Sin Semáforo": 2328,
+    "Intermitente": 26,
+    "No Funciona": 27,
+    "Sin dato": 592
+  },
+  "vehicles_known_sum": 7198,
+  "vehicles_known_n": 3780,
+  "injured_known_sum": 2815,
+  "deaths_known_sum": 51,
+  "distinct_ids": 3781
+}
