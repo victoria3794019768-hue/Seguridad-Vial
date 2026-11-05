@@ -131,7 +131,7 @@
           <div class="method"><strong>Semáforos faltantes</strong>Los campos vacíos y los valores <code>S/D</code> se agrupan visualmente como «Sin dato». No se interpretan como «Sin Semáforo» ni como cero.</div>
           <div class="method"><strong>Nombre de vía</strong>El valor aislado <code>12</code> se normaliza en la presentación como «Ruta Nacional 12» para que no aparezca como si fuera una calle llamada solamente “12”.</div>
           <div class="method warning"><strong><span class="status-label">Pendiente por falta de datos</span><br>Comparación contra el padrón de semáforos</strong>Esta base contiene el estado declarado en cada siniestro, pero no el inventario completo de semáforos ni sus ubicaciones. Por eso no se calcula la tasa «siniestros por semáforo» ni una comparación fiable entre cruces semaforizados y no semaforizados. Para hacerlo hace falta agregar el padrón y vincularlo con los cruces.</div>
-          <div class="method"><strong>Ranking de vías</strong>El índice de priorización es <code>heridos + 10 × fallecidos</code>, calculado con valores informados. El orden no está normalizado por longitud de la vía, flujo vehicular ni exposición; una avenida extensa puede acumular más casos por tener más tránsito o más cruces.</div>
+          <div class="method"><strong>Ranking de vías</strong>El índice de priorización es <code>heridos + 10 × fallecidos</code>, calculated con valores informados. El orden no está normalizado por longitud de la vía, flujo vehicular ni exposición; una avenida extensa puede acumular más casos por tener más tránsito o más cruces.</div>
           <div class="method"><strong>Interpretación</strong>El mapa de densidad indica dónde se concentran los registros geolocalizados, no la probabilidad de sufrir un siniestro. Los datos ausentes pueden sesgar los patrones; los gráficos describen asociaciones y no prueban causalidad.</div>
         </div>
       </article>
@@ -335,7 +335,10 @@
     }
     function setup() {
       fillSelect('filter-year','year','Todos los años',['2018','2019','2020','2021','2022','2023','2024','2025','Sin año']);
-      fillSelect('filter-day','day','Todos los días',dayNames);
+      
+      const elDay = document.getElementById('filter-day');
+      elDay.innerHTML = '<option value="all">Todos los días</option>' + dayNames.map(d=>`<option value="${esc(d)}">${esc(d)}</option>`).join('');
+      
       fillSelect('filter-semaforo','semaforo','Todos los estados',['Sin Semáforo','Funciona','Intermitente','No Funciona','Sin dato']);
       fillSelect('filter-zone','zone','Todas las zonas');
       fillSelect('filter-collision','collision','Todos los tipos');
